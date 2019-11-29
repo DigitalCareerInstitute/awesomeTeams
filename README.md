@@ -1,7 +1,10 @@
 # awesomeTeams
-Team generator for our x-mas party
+Teamgenerator fuer unseren X-Mas-Party-Quiz
 
 ## A dus_fbw9 project
+
+Ergebnis des letzten Mentoring-Tages der Fbw9 in Dus. Die App soll Namen der Spieler
+annehmen und permanent speichern, und Teams per Zufallsgenrator erzeugen.
 
 ## Neues:
 
