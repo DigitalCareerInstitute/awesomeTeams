@@ -12,7 +12,7 @@ annehmen und permanent speichern, und Teams per Zufallsgenrator erzeugen.
 
 Oft muss man Daten irgendwo speichern, z.B. in einer Datenbank. Da eine Datenbank
 normalerweise *Strings* speichert, muss man die Werte aus unserer JavaScript app
-erstmal in *Strings* konvertieren. Hierzu kann man die **JSON** Funtionen benutzen.
+erstmal in *Strings* konvertieren. Hierzu kann man die **JSON** Funktionen benutzen.
 
   - **JSON.stringify()** Macht aus einem javascript wert ({},[],'string',123) einen string: '{}', '[]', '"string"', '123'
 
@@ -34,3 +34,11 @@ Um daten in localStorage zu speichern muessen wir zuerst die daten mittels JSON.
 Um sie wieder benutzen zu koennen muessen wir sie mittels JSON.parse wieder "entpacken"
 
 Um das ganze zu vereinfachen bereiten wir uns eine 'save' und eine 'load' funktion vor
+
+### Array-Shuffle
+
+Wir missbrauchen die Array-Methode *sort* um einen Array in eine Zufallsreihenfolge
+zu bringen. Die Sort-Funktion vergleicht Element in einem Array indem sie einen
+Callback aufruft, der zwei parameter (a,b) bekommt. Der Callback soll 0 (fuer gleich)
+oder eine positive oder negative Zahl returnen.
+Wir returnen Math.random() - 0.5; Damit bekommen wir eine zufaellige Reihenfolge.  
