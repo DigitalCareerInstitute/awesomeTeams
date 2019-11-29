@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>awesomeTeams</title>
+  </head>
+  <body>
+    <div class="eingabe">
+      <input type="text" name="user" value="">
+      <button type="button" name="add">+</button>
+    </div>
+    <div class="actions">
+      <input type="number" name="playerCount" value="3">
+      <button type="button" name="randomize">Mix</button>
+    </div>
+    <div class="spielerliste">
+      <ul id="players"></ul>
+    </div>
+    <div class="teams">
+    </div>
+  </body>
+  <script type="text/javascript">
+
+    var eingabe      = document.querySelector('.eingabe');
+    var actions      = document.querySelector('.actions');
+    var spielerliste = document.querySelector('.spielerliste');
+    var teams        = document.querySelector('.teams');
+    var user         = document.querySelector('[name="user"]');
+    var add          = document.querySelector('[name="add"]');
+    var playerCount  = document.querySelector('[name="playerCount"]');
+    var randomize    = document.querySelector('[name="randomize"]');
+    var players      = document.querySelector('#players');
+
+    var playerList   = [];
+
+    /* Wir brauchen 4 neue Funktionen:
+      - JSON.stringify()
+        => macht aus einem javascript wert ({},[],'string',123)
+           einen string: '{}', '[]', '"string"', '123'
+      - JSON.parse()
+        => macht aus einem JSON-String wieder einen javascript wert
+      - localStorage.setItem(key,value)
+        => speichert den _string_ "value" unter dem schluessel "key" in der datenbank
+      - localStorage.getItem(key)
+        => ruft den _string_ der unter dem schluessel "key" gespeichert ist wieder ab
+    // um daten in localStorage zu speichern muessen wir zuerst die daten mittels
+    //  JSON.stringify "verpacken"
+    // Um sie wieder benutzen zu koennen muessen wir sie mittels JSON.parse
+    //  wieder "entpacken"
+
+    // um das ganze zu vereinfachen bereiten wir uns eine 'save' und eine 'load'
+    // funktion vor
+    */
+
+    function load(){
+      let data = localStorage.getItem('playerList');
+      if ( data ){
+        data = JSON.parse(data);
+        if ( Array.isArray(data) ){
+          playerList = data;
+        }
+      }
+    }
+
+    load();
+
+    function save(){
+      let data = JSON.stringify(playerList);
+      localStorage.setItem('playerList', data);
+    }
+
+    function renderPlayers(){
+      players.innerHTML = '';
+      playerList.forEach( item => {
+        let li = document.createElement('li');
+        let del = document.createElement('button');
+        li.innerText = item
+        del.innerText = 'x'
+        del.onclick = (e)=> {
+          playerList = playerList.filter( i => { return i !== item })
+          renderPlayers()
+          save()
+        }
+        li.append(del)
+        players.append(li)
+      })
+    }
+
+    renderPlayers();
+
+    add.addEventListener('click',e => {
+      let name = user.value.replace(/[^a-zA-Z0-9_]/g,'');
+      if ( name === '' ){
+        alert('bitte gib einen richtigen namen ein');
+        return
+      }
+      if ( playerList.indexOf(name) === -1 ){
+        playerList.push(name);
+        renderPlayers();
+        save();
+      } else {
+        alert(`bitte gib einen eindeutigen namen ein, ${name} existiert schon!`);
+      }
+    })
+
+    randomize.addEventListener('click', e => {
+      // loesche alle bestehenden teams
+      teams.innerHTML = ''
+
+      let playersPerTeam = Number(playerCount.value);
+
+      // kopiere playerList in einen neuen Array
+      let list = playerList.slice() // oder kurz [...playerList]
+
+      // mische list in eine zufaellige reihenfolge
+      list = list.sort( (a,b)=>{
+        return Math.random() - 0.5
+      })
+
+      // solange spieler in list existieren, ziehe spieler und blide teams
+      let ul, teamNummer = 1;
+      let teamSpieler = 0;
+      while ( list.length ){
+        if ( teamSpieler++ === 0 ){
+          ul = document.createElement('ul')
+          let h2 = document.createElement('h2')
+          h2.innerText = `Team ${teamNummer++}`
+          teams.append(h2);
+          teams.append(ul);
+        }
+        let li = document.createElement('li')
+        li.innerText = list.pop()
+        ul.append(li);
+        if ( teamSpieler === playersPerTeam ){
+          teamSpieler = 0
+        }
+      }
+    })
+  </script>
+</html>
