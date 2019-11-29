@@ -15,6 +15,13 @@ addPlayerButton.addEventListener('click',addPlayer);
 addPlayerInput.addEventListener('keyup',addPlayerOnEnter);
 playerListMixButton.addEventListener('click',mixTeams);
 
+let playing = false
+document.onclick = ()=>{
+  if ( playing ) return;
+  document.querySelector('video').play();
+  playing = true;
+}
+
 function load(){
   let data = localStorage.getItem('playerList');
   if ( data ){

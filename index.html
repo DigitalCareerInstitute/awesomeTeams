@@ -5,6 +5,9 @@
     <title>awesomeTeams</title>
   </head>
   <body>
+    <video loop autoplay>
+      <source src="feuer.mp4" type="video/mp4">
+    </video>
     <div class="container">
       <div class="row">
         <div class="col-sm-8 addPlayerContainer">
@@ -42,6 +45,12 @@
   <style media="screen">
     body {
       background: black url(bg.jpg);
+    }
+    video {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
     }
     .container {
       opacity: 0.9;
