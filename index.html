@@ -5,136 +5,56 @@
     <title>awesomeTeams</title>
   </head>
   <body>
-    <div class="eingabe">
-      <input type="text" name="user" value="">
-      <button type="button" name="add">+</button>
-    </div>
-    <div class="actions">
-      <input type="number" name="playerCount" value="3">
-      <button type="button" name="randomize">Mix</button>
-    </div>
-    <div class="spielerliste">
-      <ul id="players"></ul>
-    </div>
-    <div class="teams">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 addPlayerContainer">
+          <div class="input-group mb-3">
+            <input class="form-control" type="text" name="addPlayerInput" value="">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-warning" name="add">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 addPlayerContainer">
+          <div class="input-group mb-3">
+            <input type="number" class="form-control" name="playerCountInput" value="3">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-info" name="playerListMixButton">Mix</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm playerListContainer">
+          <table class="table table-dark">
+            <tbody id="playerListUL">
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm teamsContainer">
+        </div>
+      </div>
     </div>
   </body>
-  <script type="text/javascript">
-
-    var eingabe      = document.querySelector('.eingabe');
-    var actions      = document.querySelector('.actions');
-    var spielerliste = document.querySelector('.spielerliste');
-    var teams        = document.querySelector('.teams');
-    var user         = document.querySelector('[name="user"]');
-    var add          = document.querySelector('[name="add"]');
-    var playerCount  = document.querySelector('[name="playerCount"]');
-    var randomize    = document.querySelector('[name="randomize"]');
-    var players      = document.querySelector('#players');
-
-    var playerList   = [];
-
-    /* Wir brauchen 4 neue Funktionen:
-      - JSON.stringify()
-        => macht aus einem javascript wert ({},[],'string',123)
-           einen string: '{}', '[]', '"string"', '123'
-      - JSON.parse()
-        => macht aus einem JSON-String wieder einen javascript wert
-      - localStorage.setItem(key,value)
-        => speichert den _string_ "value" unter dem schluessel "key" in der datenbank
-      - localStorage.getItem(key)
-        => ruft den _string_ der unter dem schluessel "key" gespeichert ist wieder ab
-    // um daten in localStorage zu speichern muessen wir zuerst die daten mittels
-    //  JSON.stringify "verpacken"
-    // Um sie wieder benutzen zu koennen muessen wir sie mittels JSON.parse
-    //  wieder "entpacken"
-
-    // um das ganze zu vereinfachen bereiten wir uns eine 'save' und eine 'load'
-    // funktion vor
-    */
-
-    function load(){
-      let data = localStorage.getItem('playerList');
-      if ( data ){
-        data = JSON.parse(data);
-        if ( Array.isArray(data) ){
-          playerList = data;
-        }
-      }
+  <script src="script.js" charset="utf-8"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <style media="screen">
+    body {
+      background: black url(bg.jpg);
     }
-
-    load();
-
-    function save(){
-      let data = JSON.stringify(playerList);
-      localStorage.setItem('playerList', data);
+    .container {
+      opacity: 0.9;
+      margin-top: 1em;
     }
-
-    function renderPlayers(){
-      players.innerHTML = '';
-      playerList.forEach( item => {
-        let li = document.createElement('li');
-        let del = document.createElement('button');
-        li.innerText = item
-        del.innerText = 'x'
-        del.onclick = (e)=> {
-          playerList = playerList.filter( i => { return i !== item })
-          renderPlayers()
-          save()
-        }
-        li.append(del)
-        players.append(li)
-      })
+    table {
+      border-radius: 0.5em;
     }
-
-    renderPlayers();
-
-    add.addEventListener('click',e => {
-      let name = user.value.replace(/[^a-zA-Z0-9_]/g,'');
-      if ( name === '' ){
-        alert('bitte gib einen richtigen namen ein');
-        return
-      }
-      if ( playerList.indexOf(name) === -1 ){
-        playerList.push(name);
-        renderPlayers();
-        save();
-      } else {
-        alert(`bitte gib einen eindeutigen namen ein, ${name} existiert schon!`);
-      }
-    })
-
-    randomize.addEventListener('click', e => {
-      // loesche alle bestehenden teams
-      teams.innerHTML = ''
-
-      let playersPerTeam = Number(playerCount.value);
-
-      // kopiere playerList in einen neuen Array
-      let list = playerList.slice() // oder kurz [...playerList]
-
-      // mische list in eine zufaellige reihenfolge
-      list = list.sort( (a,b)=>{
-        return Math.random() - 0.5
-      })
-
-      // solange spieler in list existieren, ziehe spieler und blide teams
-      let ul, teamNummer = 1;
-      let teamSpieler = 0;
-      while ( list.length ){
-        if ( teamSpieler++ === 0 ){
-          ul = document.createElement('ul')
-          let h2 = document.createElement('h2')
-          h2.innerText = `Team ${teamNummer++}`
-          teams.append(h2);
-          teams.append(ul);
-        }
-        let li = document.createElement('li')
-        li.innerText = list.pop()
-        ul.append(li);
-        if ( teamSpieler === playersPerTeam ){
-          teamSpieler = 0
-        }
-      }
-    })
-  </script>
+    tr:first-of-type {
+      border-top:none;
+    }
+    .list-group {
+      margin-bottom: 0.5em;
+    }
+  </style>
 </html>
