@@ -69,7 +69,7 @@ function addPlayer (e){
   }
 }
 
-function addPlayerOnEnter(){
+function addPlayerOnEnter(e){
   if (e.code === 'Enter') addPlayer(e);
 }
 
