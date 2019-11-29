@@ -41,4 +41,4 @@ Wir missbrauchen die Array-Methode *sort* um einen Array in eine Zufallsreihenfo
 zu bringen. Die Sort-Funktion vergleicht Element in einem Array indem sie einen
 Callback aufruft, der zwei parameter (a,b) bekommt. Der Callback soll 0 (fuer gleich)
 oder eine positive oder negative Zahl returnen.
-Wir returnen Math.random() - 0.5; Damit bekommen wir eine zufaellige Reihenfolge.  
+Wir returnen **Math.random() - 0.5**; Damit bekommen wir eine zufaellige Reihenfolge.  
