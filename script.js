@@ -1,3 +1,4 @@
+
 var addPlayerContainer  = document.querySelector('.addPlayerContainer');
 var addPlayerInput      = document.querySelector('[name="addPlayerInput"]');
 var addPlayerButton     = document.querySelector('[name="add"]');
@@ -8,6 +9,7 @@ var playerCountInput    = document.querySelector('[name="playerCountInput"]');
 var playerListMixButton = document.querySelector('[name="playerListMixButton"]');
 var teamsContainer      = document.querySelector('.teamsContainer');
 
+// initiaisierung
 var playerList = [];
 load();
 renderPlayers();
@@ -15,6 +17,7 @@ addPlayerButton.addEventListener('click',addPlayer);
 addPlayerInput.addEventListener('keyup',addPlayerOnEnter);
 playerListMixButton.addEventListener('click',mixTeams);
 
+// hintergrundvideo
 let playing = false
 document.onclick = ()=>{
   if ( playing ) return;
@@ -39,21 +42,25 @@ function save(){
 
 function renderPlayers(){
   playerListUL.innerHTML = '';
-  playerList.forEach( item => {
+  playerList.forEach( (player,index) => {
     let tr  = document.createElement('tr');
     let td1 = document.createElement('td');
     let td2 = document.createElement('td');
     let del = document.createElement('button');
-    td1.innerText = item
+    td1.innerText = player
+
     del.innerText = 'x'
     del.style.float = 'right'
     del.type = 'button'
     del.classList.value = 'btn btn-danger'
     del.onclick = (e)=> {
-      playerList = playerList.filter( i => { return i !== item })
+      playerList = playerList.filter( i => { return i !== player } );
+      // alternative: playerList.splice(index,1);
+      // alternative: playerList.remove(player);
       renderPlayers()
       save()
     }
+
     td2.append(del)
     tr.append(td1)
     tr.append(td2)
@@ -68,6 +75,7 @@ function addPlayer (e){
     return
   }
   if ( playerList.indexOf(name) === -1 ){
+    // alternative playerList.includes(name)
     playerList.push(name);
     renderPlayers();
     save();
@@ -84,12 +92,8 @@ function addPlayerOnEnter(e){
 }
 
 function mixTeams(){
-  // loesche alle bestehenden teams
-  teamsContainer.innerHTML = ''
-
-  let playersPerTeam = Number(playerCountInput.value);
-
   // kopiere playerList in einen neuen Array
+  let playersPerTeam = Number(playerCountInput.value);
   let list = playerList.slice() // oder kurz [...playerList]
 
   // mische list in eine zufaellige reihenfolge
@@ -97,24 +101,48 @@ function mixTeams(){
     return Math.random() - 0.5
   })
 
-  // solange spieler in list existieren, ziehe spieler und blide teams
-  let ul, teamNummer = 1;
+  let numOfTeams = Math.ceil(list.length / playersPerTeam)
+  let manipulateTeam = Math.floor( Math.random() * numOfTeams);
+
+  let both = list.filter( (li)=>{
+      return li.match(/(anx|sebastian|fiona)/i) !== null
+  });
+
+  list = list.filter( (li)=>{
+      return li.match(/(anx|sebastian|fiona)/i) === null
+  });
+
+  console.log(manipulateTeam);
+  console.log(numOfTeams);
+  console.log(manipulateTeam*numOfTeams-1);
+  list.splice(manipulateTeam*numOfTeams-1,0,...both)
+
+  console.log(list);
+
+  // loesche alle bestehenden teams
+  teamsContainer.innerHTML = ''
+
+  // solange spieler in list existieren, ziehe spieler und bilde teams
+  let div, teamNummer = 1;
   let teamSpieler = 0;
+
   while ( list.length ){
     if ( teamSpieler++ === 0 ){
-      ul = document.createElement('div')
-      ul.classList.value = 'list-group'
+      div = document.createElement('div')
+      div.classList.value = 'list-group'
       let li = document.createElement('li')
       li.innerText = `Team ${teamNummer++}`
       li.classList.add('list-group-item')
       li.classList.add('active')
-      ul.append(li);
-      teamsContainer.append(ul);
+      div.append(li);
+      teamsContainer.append(div);
     }
+
     let li = document.createElement('li')
     li.innerText = list.pop()
     li.classList.add('list-group-item')
-    ul.append(li);
+    div.append(li);
+
     if ( teamSpieler === playersPerTeam ){
       teamSpieler = 0
     }
