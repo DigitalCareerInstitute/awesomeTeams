@@ -101,7 +101,7 @@ function mixTeams(){
     return Math.random() - 0.5
   })
 
-  let numOfTeams = Math.ceil(list.length / playersPerTeam)
+  let numOfTeams = Math.ceil(list.length / playersPerTeam) - 1
   let manipulateTeam = Math.floor( Math.random() * numOfTeams);
 
   let both = list.filter( (li)=>{
