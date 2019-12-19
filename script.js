@@ -113,9 +113,9 @@ function mixTeams(){
   });
 
   console.log(manipulateTeam);
-  console.log(numOfTeams);
-  console.log(manipulateTeam*numOfTeams-1);
-  list.splice(manipulateTeam*numOfTeams-1,0,...both)
+  console.log(playersPerTeam);
+  console.log(manipulateTeam*playersPerTeam);
+  list.splice(manipulateTeam*playersPerTeam,0,...both)
 
   console.log(list);
 
@@ -139,7 +139,7 @@ function mixTeams(){
     }
 
     let li = document.createElement('li')
-    li.innerText = list.pop()
+    li.innerText = list.shift()
     li.classList.add('list-group-item')
     div.append(li);
 
